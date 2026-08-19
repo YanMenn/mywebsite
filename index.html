@@ -2,183 +2,225 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>欢迎访问张莹莹课题组</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>心跳</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: #f2f4f6;
-    color: #333;
+  :root{
+    --bg: #05000a;
+    --red: #ff1a3c;
+    --red-soft: #ff4d6d;
+    --red-dim: #7a0e1e;
+    --glow: 0 0 6px #ff1a3c, 0 0 16px #ff1a3c, 0 0 32px #b8102b, 0 0 60px #7a0e1e;
   }
 
-  /* ===== 顶部横幅 ===== */
-  .banner {
-    background: linear-gradient(120deg, #4a90d9 0%, #7fb8e8 50%, #a8d4f0 100%);
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    color: #fff;
-  }
-  .banner .logo {
-    font-size: 22px;
-    font-weight: bold;
-    line-height: 1.3;
-  }
-  .banner .logo small { display: block; font-size: 13px; font-weight: normal; opacity: .9; }
-  .banner .title { text-align: center; }
-  .banner .title h1 {
-    font-size: 34px;
-    letter-spacing: 6px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,.35);
-  }
-  .banner .title p {
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-top: 6px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,.3);
-  }
-  .banner .hex { display: flex; gap: 8px; }
-  .banner .hex span {
-    width: 64px; height: 72px;
-    background: rgba(255,255,255,.25);
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html, body{
+    height:100%;
+    width:100%;
+    background: var(--bg);
+    overflow:hidden;
+    touch-action: manipulation;
   }
 
-  /* ===== 导航栏 ===== */
-  nav {
-    background: #1a1a1a;
-    display: flex;
-    justify-content: center;
-  }
-  nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 14px 26px;
-    font-size: 15px;
-    transition: background .2s;
-  }
-  nav a:hover { background: #333; }
-  nav a.active { background: #c0392b; }
-
-  /* ===== 主体布局 ===== */
-  .container {
-    max-width: 1100px;
-    margin: 24px auto;
-    display: flex;
-    gap: 24px;
-    padding: 0 16px;
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
   }
 
-  /* 左侧内容 */
-  .content {
-    flex: 1;
+  /* 背景氛围光晕，随心跳呼吸 */
+  .ambient{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255,26,60,0.18), transparent 70%),
+      radial-gradient(ellipse 90% 70% at 50% 50%, rgba(120,10,25,0.25), transparent 75%);
+    animation: breathe 1.15s ease-in-out infinite;
+    pointer-events:none;
+  }
+
+  @keyframes breathe{
+    0%   { opacity:.55; }
+    14%  { opacity:1; }
+    28%  { opacity:.5; }
+    100% { opacity:.55; }
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:900px;
+    aspect-ratio: 16/10;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* 中央跳动的心脏图形 */
+  .heart-wrap{
+    position:absolute;
+    width:34vmin;
+    max-width:260px;
+    aspect-ratio:1/1;
+    filter: drop-shadow(0 0 10px rgba(255,26,60,.65)) drop-shadow(0 0 30px rgba(255,26,60,.35));
+    animation: beat 1.15s ease-in-out infinite;
+    opacity:.9;
+  }
+
+  .heart-wrap svg path{
+    fill: url(#heartGrad);
+  }
+
+  @keyframes beat{
+    0%   { transform: scale(0.86); }
+    14%  { transform: scale(1.06); }
+    22%  { transform: scale(0.94); }
+    30%  { transform: scale(1.14); }
+    45%  { transform: scale(0.9); }
+    100% { transform: scale(0.86); }
+  }
+
+  /* 心电图折线，横贯全屏、无限循环滚动 */
+  .ecg{
+    position:relative;
+    width:100%;
+    height:38%;
+    overflow:hidden;
+  }
+
+  .ecg svg{
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:200%;
+    animation: scroll 3.6s linear infinite;
+  }
+
+  @keyframes scroll{
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .ecg-line{
+    fill:none;
+    stroke: var(--red);
+    stroke-width:3.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter: drop-shadow(0 0 3px #ff1a3c) drop-shadow(0 0 10px #ff1a3c) drop-shadow(0 0 22px #b8102b);
+  }
+
+  /* 跟随亮点，模拟脉冲头 */
+  .pulse-dot{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
     background: #fff;
-    padding: 24px 28px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-  }
-  .content h2 {
-    color: #c0392b;
-    font-size: 20px;
-    margin-bottom: 16px;
-  }
-  .content p {
-    text-align: justify;
-    line-height: 1.9;
-    margin-bottom: 14px;
-    font-size: 14.5px;
+    box-shadow: 0 0 8px 3px #fff, 0 0 20px 8px #ff1a3c;
+    top:50%;
+    animation: dotmove 3.6s linear infinite, dotpulse 0.6s ease-in-out infinite;
   }
 
-  /* 右侧链接栏 */
-  .sidebar {
-    width: 260px;
-    background: #fff;
-    padding: 20px 22px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    align-self: flex-start;
+  @keyframes dotmove{
+    from{ left:0%; }
+    to  { left:100%; }
   }
-  .sidebar h3 {
-    font-size: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #c0392b;
-    margin-bottom: 12px;
-  }
-  .sidebar a {
-    display: block;
-    color: #333;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 7px 0;
-  }
-  .sidebar a:hover { color: #c0392b; }
 
-  /* ===== 页脚 ===== */
-  footer {
-    text-align: center;
-    color: #888;
+  @keyframes dotpulse{
+    0%,100%{ transform: translate(-50%,-50%) scale(1); }
+    50%{ transform: translate(-50%,-50%) scale(1.5); }
+  }
+
+  .label{
+    position:absolute;
+    bottom:6vh;
+    left:50%;
+    transform:translateX(-50%);
+    color: var(--red-soft);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
     font-size: 13px;
-    padding: 20px;
+    letter-spacing: 4px;
+    opacity:.55;
+    text-shadow: 0 0 8px rgba(255,26,60,.8);
+    animation: breathe 1.15s ease-in-out infinite;
+  }
+
+  @media (max-width: 480px){
+    .heart-wrap{ width:40vmin; }
+    .label{ font-size: 11px; letter-spacing: 3px; bottom: 5vh; }
   }
 </style>
 </head>
 <body>
 
-  <!-- 顶部横幅 -->
-  <div class="banner">
-    <div class="logo">
-      清华大学
-      <small>Tsinghua University</small>
+  <div class="ambient"></div>
+
+  <div class="stage">
+
+    <div class="ecg">
+      <svg viewBox="0 0 1600 200" preserveAspectRatio="none">
+        <!-- 一个完整周期(0-800)重复一次(800-1600)以实现无缝循环 -->
+        <polyline class="ecg-line" points="
+          0,100
+          140,100
+          170,100
+          190,60
+          210,140
+          230,20
+          250,175
+          270,100
+          400,100
+          540,100
+          570,100
+          590,60
+          610,140
+          630,20
+          650,175
+          670,100
+          800,100
+          940,100
+          970,100
+          990,60
+          1010,140
+          1030,20
+          1050,175
+          1070,100
+          1200,100
+          1340,100
+          1370,100
+          1390,60
+          1410,140
+          1430,20
+          1450,175
+          1470,100
+          1600,100
+        "/>
+      </svg>
+      <div class="pulse-dot"></div>
     </div>
-    <div class="title">
-      <h1>欢迎访问张莹莹课题组</h1>
-      <p>WELCOME TO THE YY GROUP</p>
+
+    <div class="heart-wrap">
+      <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="heartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff5c7a"/>
+            <stop offset="55%" stop-color="#ff1a3c"/>
+            <stop offset="100%" stop-color="#8c0f22"/>
+          </linearGradient>
+        </defs>
+        <path d="M23.6,0c-3,0-5.7,1.4-7.6,3.7C14.1,1.4,11.4,0,8.4,0C3.8,0,0,3.8,0,8.4
+                 c0,9.4,10.6,15.4,15.2,19.4c0.5,0.4,1.1,0.4,1.6,0C21.4,23.8,32,17.8,32,8.4
+                 C32,3.8,28.2,0,23.6,0z"/>
+      </svg>
     </div>
-    <div class="hex">
-      <span>🧬</span><span>🔬</span><span>⚛️</span>
-    </div>
+
+    <div class="label">L I V E</div>
+
   </div>
-
-  <!-- 导航栏 -->
-  <nav>
-    <a href="#">首页</a>
-    <a href="#" class="active">研究方向</a>
-    <a href="#">研究成果 ▼</a>
-    <a href="#">课题组成员 ▼</a>
-    <a href="#">新闻动态</a>
-    <a href="#">奖励荣誉</a>
-    <a href="#">文化&amp;活动</a>
-    <a href="#">招生招聘</a>
-    <a href="#">友情链接</a>
-    <a href="#">联系方式</a>
-  </nav>
-
-  <!-- 主体 -->
-  <div class="container">
-    <div class="content">
-      <h2>研究方向</h2>
-      <p>课题组围绕纳米碳材料及其复合材料的制备科学、物理与化学性能开展研究，重点发展面向柔性可穿戴系统的新型碳材料。当前主要关注碳纳米管、石墨烯和天然丝蛋白材料，探索其控制制备方法、结构-性能关联，在此基础上，开发其在器件、能源、环境领域的应用。</p>
-      <p>近几年，课题组在超长碳纳米管的制备、光学可视化表征以及超润滑研究，单晶石墨烯的制备与水辅助光学光差，高灵敏宽应变柔性可穿戴传感器，丝基透明电子皮肤，"饲喂法"制备超强丝纤维等方面取得了一系列原创性研究成果。</p>
-      <p>共发表SCI论文200余篇，包括以通讯作者发表的Nat Nanotechnol、Nat Commun、Adv Mater、JACS、Nano Lett、ACS Nano、Adv Funct Mater等，相关研究成果曾被Nature Nanotechnology、C&amp;E News、Scientific American、人民日报、科技日报等报道。</p>
-    </div>
-
-    <div class="sidebar">
-      <h3>常用链接</h3>
-      <a href="#">清华大学</a>
-      <a href="#">清华大学化学系</a>
-      <a href="#">清华大学微纳米力学与多学科交叉创新研究中心</a>
-      <a href="#">北京大学纳米化学研究中心</a>
-      <a href="#">Nature</a>
-      <a href="#">Science</a>
-      <a href="#">ACS.org</a>
-      <a href="#">Advanced Materials</a>
-    </div>
-  </div>
-
-  <footer>© 2026 张莹莹课题组 · 清华大学化学系</footer>
 
 </body>
 </html>
